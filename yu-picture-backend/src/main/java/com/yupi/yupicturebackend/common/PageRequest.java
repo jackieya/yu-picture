@@ -4,11 +4,15 @@ import com.yupi.yupicturebackend.exception.ErrorCode;
 import com.yupi.yupicturebackend.exception.ThrowUtils;
 import lombok.Data;
 
+import java.util.regex.Pattern;
+
 /**
  * 通用的分页请求类
  */
 @Data
 public class PageRequest {
+
+    private static final Pattern SORT_FIELD_PATTERN = Pattern.compile("^[a-zA-Z][a-zA-Z0-9]*$");
 
     /**
      * 当前页号
@@ -26,13 +30,13 @@ public class PageRequest {
     private String sortField;
 
     /**
-     * 排序顺序（默认升序）
+     * 排序顺序（默认降序）
      */
     private String sortOrder = "descend";
 
     public void setSortField(String sortField) {
         if (sortField != null && !sortField.isEmpty()) {
-            ThrowUtils.throwIf(!sortField.matches("^[a-zA-Z][a-zA-Z0-9]*$"),
+            ThrowUtils.throwIf(!SORT_FIELD_PATTERN.matcher(sortField).matches(),
                     ErrorCode.PARAMS_ERROR, "排序字段名称不合法");
         }
         this.sortField = sortField;
