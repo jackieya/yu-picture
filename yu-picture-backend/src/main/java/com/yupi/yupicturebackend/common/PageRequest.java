@@ -1,5 +1,7 @@
 package com.yupi.yupicturebackend.common;
 
+import com.yupi.yupicturebackend.exception.ErrorCode;
+import com.yupi.yupicturebackend.exception.ThrowUtils;
 import lombok.Data;
 
 /**
@@ -27,4 +29,12 @@ public class PageRequest {
      * 排序顺序（默认升序）
      */
     private String sortOrder = "descend";
+
+    public void setSortField(String sortField) {
+        if (sortField != null && !sortField.isEmpty()) {
+            ThrowUtils.throwIf(!sortField.matches("^[a-zA-Z][a-zA-Z0-9]*$"),
+                    ErrorCode.PARAMS_ERROR, "排序字段名称不合法");
+        }
+        this.sortField = sortField;
+    }
 }
